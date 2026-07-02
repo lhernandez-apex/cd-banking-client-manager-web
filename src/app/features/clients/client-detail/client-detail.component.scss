@@ -1,0 +1,134 @@
+/* ── Detail shell ───────────────────────────────────────────────────────── */
+.detail-shell {
+  max-width: 640px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: sans-serif;
+}
+
+/* ── Status banners ─────────────────────────────────────────────────────── */
+.status-banner {
+  padding: 0.85rem 1.2rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+
+  &--loading {
+    background: #e8f4fd;
+    color: #1a5a8a;
+    border: 1px solid #b3d7f0;
+  }
+
+  &--error {
+    background: #fdecea;
+    color: #a02020;
+    border: 1px solid #f5b4b4;
+  }
+}
+
+/* ── Detail card ────────────────────────────────────────────────────────── */
+.detail-card {
+  background: #ffffff;
+  border: 1px solid #dde1e7;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    background: #f8f9fa;
+    border-bottom: 1px solid #dde1e7;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    flex: 1;
+  }
+
+  &__badge {
+    padding: 0.25rem 0.65rem;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+
+    &--savings  { background: #d4edda; color: #1a5c2e; }
+    &--checking { background: #cce5ff; color: #004085; }
+  }
+
+  /* Definition list of fields */
+  &__fields {
+    margin: 0;
+    padding: 0.5rem 0;
+  }
+
+  &__row {
+    display: flex;
+    align-items: baseline;
+    padding: 0.75rem 1.5rem;
+    border-bottom: 1px solid #f1f3f5;
+
+    &:last-child { border-bottom: none; }
+  }
+
+  &__label {
+    min-width: 140px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__value {
+    flex: 1;
+    margin: 0;
+    font-size: 1rem;
+    color: #212529;
+
+    &--balance {
+      font-weight: 700;
+      color: #1a5c2e;
+      font-size: 1.05rem;
+    }
+  }
+
+  /* Footer buttons */
+  &__actions {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1.1rem 1.5rem;
+    background: #f8f9fa;
+    border-top: 1px solid #dde1e7;
+  }
+}
+
+/* ── Error-state back-link row ──────────────────────────────────────────── */
+.error-actions {
+  margin-top: 1rem;
+}
+
+/* ── Shared button styles ───────────────────────────────────────────────── */
+.btn {
+  padding: 0.55rem 1.2rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+
+  &:disabled { opacity: 0.55; cursor: not-allowed; }
+
+  &--primary   { background: #0d6efd; color: #fff;     }
+  &--secondary { background: #6c757d; color: #fff;     }
+
+  &:hover:not(:disabled) { opacity: 0.88; }
+}

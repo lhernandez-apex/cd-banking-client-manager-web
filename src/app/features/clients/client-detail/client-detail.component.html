@@ -1,0 +1,72 @@
+<section class="detail-shell">
+
+  <!-- ── Loading state ─────────────────────────────────────────── -->
+  <div *ngIf="isLoading" class="status-banner status-banner--loading" role="status">
+    Loading client details…
+  </div>
+
+  <!-- ── Error state ───────────────────────────────────────────── -->
+  <div *ngIf="errorMessage && !isLoading" class="status-banner status-banner--error" role="alert">
+    {{ errorMessage }}
+  </div>
+
+  <!-- ── Client detail card ────────────────────────────────────── -->
+  <div *ngIf="client && !isLoading" class="detail-card">
+
+    <header class="detail-card__header">
+      <h2 class="detail-card__title">{{ client.name }}</h2>
+      <span class="detail-card__badge"
+            [class.detail-card__badge--savings]="client.accountType === 'SAVINGS'"
+            [class.detail-card__badge--checking]="client.accountType === 'CHECKING'">
+        {{ accountTypeLabels[client.accountType] }}
+      </span>
+    </header>
+
+    <dl class="detail-card__fields">
+
+      <div class="detail-card__row">
+        <dt class="detail-card__label">Client ID</dt>
+        <dd class="detail-card__value">{{ client.id }}</dd>
+      </div>
+
+      <div class="detail-card__row">
+        <dt class="detail-card__label">Email</dt>
+        <dd class="detail-card__value">{{ client.email }}</dd>
+      </div>
+
+      <div class="detail-card__row">
+        <dt class="detail-card__label">Account Type</dt>
+        <dd class="detail-card__value">{{ accountTypeLabels[client.accountType] }}</dd>
+      </div>
+
+      <div class="detail-card__row">
+        <dt class="detail-card__label">Balance</dt>
+        <dd class="detail-card__value detail-card__value--balance">
+          {{ client.balance | currency:'USD':'symbol':'1.2-2' }}
+        </dd>
+      </div>
+
+    </dl>
+
+    <!-- ── Action row ─────────────────────────────────────────── -->
+    <footer class="detail-card__actions">
+      <button type="button" class="btn btn--secondary" (click)="onBack()">
+        ← Back to List
+      </button>
+      <button type="button" class="btn btn--primary"
+              [disabled]="isLoading"
+              (click)="onEdit()">
+        Edit Client
+      </button>
+    </footer>
+
+  </div>
+
+  <!-- ── Back button shown even when no client loaded (error case) ─ -->
+  <div *ngIf="errorMessage && !isLoading" class="error-actions">
+    <button type="button" class="btn btn--secondary" (click)="onBack()">
+      ← Back to List
+    </button>
+  </div>
+
+</section>
