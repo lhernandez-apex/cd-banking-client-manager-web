@@ -1,5 +1,6 @@
 import { TestBed }             from '@angular/core/testing';
 import { provideRouter }        from '@angular/router';
+import { provideHttpClient }    from '@angular/common/http';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { routes }               from './app.routes';
 import { ClientListComponent }   from './features/clients/client-list/client-list.component';
@@ -16,7 +17,11 @@ describe('App Routes', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideRouter(routes)]
+      providers: [
+        provideRouter(routes),
+        // Required by ClientListComponent → ClientService → HttpClient
+        provideHttpClient()
+      ]
     });
   });
 

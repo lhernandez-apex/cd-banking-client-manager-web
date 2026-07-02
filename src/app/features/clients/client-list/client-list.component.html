@@ -1,0 +1,51 @@
+<!-- ── Header bar ──────────────────────────────────────────────────────── -->
+<div class="list-header">
+  <h2>Banking Clients</h2>
+  <button class="btn btn-primary" (click)="onNewClient()">+ New Client</button>
+</div>
+
+<!-- ── Error banner ───────────────────────────────────────────────────── -->
+<div class="error-banner" *ngIf="errorMessage">
+  {{ errorMessage }}
+</div>
+
+<!-- ── Loading indicator ──────────────────────────────────────────────── -->
+<div class="loading" *ngIf="isLoading">Loading clients…</div>
+
+<!-- ── Empty state ────────────────────────────────────────────────────── -->
+<div class="empty-state" *ngIf="!isLoading && clients.length === 0 && !errorMessage">
+  <p>No clients found. Click <strong>+ New Client</strong> to add one.</p>
+</div>
+
+<!-- ── Client table ───────────────────────────────────────────────────── -->
+<div class="table-wrapper" *ngIf="!isLoading && clients.length > 0">
+  <table class="client-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Account Type</th>
+        <th>Balance</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let client of clients">
+        <td>{{ client.id }}</td>
+        <td>{{ client.name }}</td>
+        <td>{{ client.email }}</td>
+        <td>{{ accountTypeLabels[client.accountType] }}</td>
+        <td>{{ client.balance | number:'1.2-2' }}</td>
+        <td class="actions">
+          <a class="btn btn-sm btn-info"
+             [routerLink]="['/clients', client.id]">View</a>
+          <a class="btn btn-sm btn-warning"
+             [routerLink]="['/clients', client.id, 'edit']">Edit</a>
+          <button class="btn btn-sm btn-danger"
+                  (click)="onDelete(client.id, client.name)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
