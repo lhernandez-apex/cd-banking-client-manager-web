@@ -1,0 +1,95 @@
+<!-- ── Page header ─────────────────────────────────────────────────────── -->
+<div class="form-page">
+  <h2>{{ pageTitle }}</h2>
+
+  <!-- Error banner -->
+  <div class="error-banner" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <!-- ── Reactive form ──────────────────────────────────────────────────── -->
+  <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" novalidate class="client-form">
+
+    <!-- Name -->
+    <div class="form-group">
+      <label for="name">Full Name <span class="required">*</span></label>
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        placeholder="e.g. Jane Doe"
+        [class.is-invalid]="fieldInvalid('name')" />
+      <div class="field-error" *ngIf="fieldInvalid('name')">
+        <span *ngIf="field('name')?.errors?.['required']">Name is required.</span>
+        <span *ngIf="field('name')?.errors?.['maxlength']">Name must not exceed 100 characters.</span>
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label for="email">Email Address <span class="required">*</span></label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        placeholder="e.g. jane.doe@email.com"
+        [class.is-invalid]="fieldInvalid('email')" />
+      <div class="field-error" *ngIf="fieldInvalid('email')">
+        <span *ngIf="field('email')?.errors?.['required']">Email is required.</span>
+        <span *ngIf="field('email')?.errors?.['email']">Must be a valid email address.</span>
+        <span *ngIf="field('email')?.errors?.['maxlength']">Email must not exceed 150 characters.</span>
+      </div>
+    </div>
+
+    <!-- Account type -->
+    <div class="form-group">
+      <label for="accountType">Account Type <span class="required">*</span></label>
+      <select
+        id="accountType"
+        formControlName="accountType"
+        [class.is-invalid]="fieldInvalid('accountType')">
+        <option [ngValue]="null" disabled>— Select type —</option>
+        <option *ngFor="let opt of accountTypeOptions" [value]="opt">
+          {{ accountTypeLabels[opt] }}
+        </option>
+      </select>
+      <div class="field-error" *ngIf="fieldInvalid('accountType')">
+        Account type is required.
+      </div>
+    </div>
+
+    <!-- Balance -->
+    <div class="form-group">
+      <label for="balance">Balance <span class="required">*</span></label>
+      <input
+        id="balance"
+        type="number"
+        formControlName="balance"
+        placeholder="0.00"
+        min="0"
+        step="0.01"
+        [class.is-invalid]="fieldInvalid('balance')" />
+      <div class="field-error" *ngIf="fieldInvalid('balance')">
+        <span *ngIf="field('balance')?.errors?.['required']">Balance is required.</span>
+        <span *ngIf="field('balance')?.errors?.['min']">Balance must be zero or greater.</span>
+      </div>
+    </div>
+
+    <!-- ── Action buttons ───────────────────────────────────────────────── -->
+    <div class="form-actions">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="onCancel()">
+        Cancel
+      </button>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Saving…' : (isEditMode ? 'Update Client' : 'Create Client') }}
+      </button>
+    </div>
+
+  </form>
+</div>
