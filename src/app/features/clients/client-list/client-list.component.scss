@@ -1,93 +1,259 @@
-// ── Layout ────────────────────────────────────────────────────────────────
-
-.list-header {
-  display: flex;
+// ── Page header ───────────────────────────────────────────────────────────────
+.page-header {
+  display:         flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.25rem;
+  align-items:     center;
+  margin-bottom:   1.5rem;
 
-  h2 {
-    margin: 0;
-    font-size: 1.5rem;
-    color: #1a1a2e;
+  &__title-group {
+    display:     flex;
+    align-items: center;
+    gap:         0.5rem;
+  }
+
+  &__icon {
+    font-size: 1.8rem;
+    width:     1.8rem;
+    height:    1.8rem;
+    color:     var(--bcm-primary);
+  }
+
+  &__title {
+    margin:      0;
+    font-size:   1.5rem;
+    font-weight: 600;
+    color:       #1a1a2e;
   }
 }
 
-// ── Feedback banners ──────────────────────────────────────────────────────
+.new-client-btn {
+  gap: 4px;
+}
 
+// ── Error banner ──────────────────────────────────────────────────────────────
 .error-banner {
-  background: #fdecea;
-  color: #c62828;
-  border: 1px solid #ef9a9a;
-  border-radius: 4px;
-  padding: 0.75rem 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  border-left:   4px solid var(--bcm-warn) !important;
 }
 
-.loading,
+.error-content {
+  display:     flex;
+  align-items: center;
+  gap:         0.6rem;
+  color:       var(--bcm-warn);
+
+  &__icon { font-size: 1.2rem; }
+}
+
+// ── Loading ───────────────────────────────────────────────────────────────────
+.loading-container {
+  display:         flex;
+  flex-direction:  column;
+  align-items:     center;
+  justify-content: center;
+  padding:         3rem 0;
+  gap:             1rem;
+}
+
+.loading-label {
+  margin:     0;
+  color:      var(--bcm-text-secondary);
+  font-size:  0.95rem;
+}
+
+// ── Summary stat cards ────────────────────────────────────────────────────────
+.stats-grid {
+  display:               grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:                   1rem;
+  margin-bottom:         1.5rem;
+
+  @media (max-width: 900px) { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 520px) { grid-template-columns: 1fr; }
+}
+
+.stat-card {
+  &__content {
+    display:     flex;
+    align-items: center;
+    gap:         1rem;
+    padding:     1rem !important;
+  }
+
+  &__icon-wrap {
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+    width:           48px;
+    height:          48px;
+    border-radius:   12px;
+    flex-shrink:     0;
+
+    mat-icon { font-size: 1.5rem; }
+
+    &--total    { background: #e3f0ff; color: var(--bcm-primary); }
+    &--savings  { background: #e8f5e9; color: var(--bcm-success); }
+    &--checking { background: #e3f2fd; color: var(--bcm-accent);  }
+    &--balance  { background: #fff8e1; color: #f57f17;            }
+  }
+
+  &__info {
+    display:        flex;
+    flex-direction: column;
+    gap:            2px;
+  }
+
+  &__value {
+    font-size:   1.5rem;
+    font-weight: 700;
+    color:       #1a1a2e;
+    line-height: 1.1;
+
+    &--balance { font-size: 1.2rem; }
+  }
+
+  &__label {
+    font-size:   0.78rem;
+    font-weight: 500;
+    color:       var(--bcm-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
+// ── Table card ────────────────────────────────────────────────────────────────
+.table-card {
+  overflow: hidden;
+}
+
+.table-toolbar {
+  padding:         16px 16px 0;
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+}
+
+.search-field {
+  width:     320px;
+  max-width: 100%;
+}
+
+// ── Empty state ───────────────────────────────────────────────────────────────
 .empty-state {
-  text-align: center;
-  padding: 2rem;
-  color: #666;
+  display:         flex;
+  flex-direction:  column;
+  align-items:     center;
+  padding:         3.5rem 2rem;
+  text-align:      center;
+  gap:             0.5rem;
+
+  &__icon {
+    font-size: 3.5rem;
+    width:     3.5rem;
+    height:    3.5rem;
+    color:     #b0bec5;
+  }
+
+  &__title {
+    margin:      0.5rem 0 0;
+    font-size:   1.15rem;
+    font-weight: 600;
+    color:       #546e7a;
+  }
+
+  &__subtitle {
+    margin:     0 0 1rem;
+    font-size:  0.9rem;
+    color:      #90a4ae;
+    max-width:  360px;
+  }
 }
 
-// ── Table ─────────────────────────────────────────────────────────────────
+// ── No search results ─────────────────────────────────────────────────────────
+.no-results {
+  display:         flex;
+  flex-direction:  column;
+  align-items:     center;
+  padding:         2.5rem;
+  gap:             0.5rem;
+  color:           var(--bcm-text-secondary);
 
-.table-wrapper {
+  &__icon {
+    font-size: 2.5rem;
+    width:     2.5rem;
+    height:    2.5rem;
+    opacity:   0.5;
+  }
+
+  &__text {
+    margin:    0;
+    font-size: 0.95rem;
+  }
+}
+
+// ── Data table ────────────────────────────────────────────────────────────────
+.table-container {
   overflow-x: auto;
+  max-height: 520px;
 }
 
 .client-table {
   width: 100%;
-  border-collapse: collapse;
-  font-size: 0.95rem;
 
-  th, td {
-    padding: 0.75rem 1rem;
-    text-align: left;
-    border-bottom: 1px solid #e0e0e0;
-  }
-
-  th {
-    background: #f5f5f5;
+  // Sticky header background
+  th.mat-mdc-header-cell {
+    background:  #f8f9fa;
     font-weight: 600;
-    color: #333;
+    font-size:   0.82rem;
+    color:       var(--bcm-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
     white-space: nowrap;
   }
 
-  tbody tr:hover {
-    background: #fafafa;
+  // Row hover effect
+  .data-row {
+    transition: background 0.12s ease;
+    &:hover { background: var(--bcm-primary-light); }
   }
 
-  .actions {
-    display: flex;
-    gap: 0.4rem;
-    flex-wrap: nowrap;
+  td.mat-mdc-cell {
+    font-size: 0.92rem;
+    color:     #212529;
   }
 }
 
-// ── Buttons ───────────────────────────────────────────────────────────────
+// ── Account type badge ────────────────────────────────────────────────────────
+.account-badge {
+  padding:        3px 10px;
+  border-radius:  20px;
+  font-size:      0.75rem;
+  font-weight:    600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space:    nowrap;
 
-.btn {
-  display: inline-block;
-  padding: 0.45rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 500;
-  text-decoration: none;
-  line-height: 1.4;
-
-  &.btn-primary  { background: #1565c0; color: #fff; }
-  &.btn-info     { background: #0288d1; color: #fff; }
-  &.btn-warning  { background: #f57c00; color: #fff; }
-  &.btn-danger   { background: #c62828; color: #fff; }
-
-  &.btn-sm {
-    padding: 0.3rem 0.65rem;
-    font-size: 0.8rem;
-  }
-
-  &:hover { opacity: 0.88; }
+  &--savings  { background: #e8f5e9; color: var(--bcm-success); }
+  &--checking { background: #e3f2fd; color: var(--bcm-accent);  }
 }
+
+// ── Balance cell ──────────────────────────────────────────────────────────────
+.balance-value {
+  font-weight: 600;
+  color:       var(--bcm-success);
+  font-variant-numeric: tabular-nums;
+}
+
+// ── Client name / email ───────────────────────────────────────────────────────
+.client-name  { font-weight: 500; color: #1a1a2e; }
+.client-email { color: var(--bcm-text-secondary); font-size: 0.88rem; }
+
+// ── Action buttons ────────────────────────────────────────────────────────────
+.action-cell {
+  display:     flex;
+  align-items: center;
+  gap:         2px;
+}
+
+.action-edit { color: #f57c00 !important; }
+
