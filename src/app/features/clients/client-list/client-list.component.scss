@@ -136,6 +136,11 @@
 .search-field {
   width:     320px;
   max-width: 100%;
+
+  // Full-width search bar on small screens
+  @media (max-width: 600px) {
+    width: 100%;
+  }
 }
 
 // ── Empty state ───────────────────────────────────────────────────────────────

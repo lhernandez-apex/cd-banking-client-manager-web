@@ -45,7 +45,9 @@
         <a mat-list-item
            routerLink="/clients"
            routerLinkActive="sidenav-item--active"
-           [routerLinkActiveOptions]="{ exact: false }">
+           [routerLinkActiveOptions]="{ exact: false }"
+           (click)="onNavItemClick()"
+           aria-label="Go to Clients list">
           <mat-icon matListItemIcon>people</mat-icon>
           <span matListItemTitle>Clients</span>
         </a>

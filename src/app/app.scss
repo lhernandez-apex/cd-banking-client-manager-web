@@ -91,6 +91,12 @@
     // Tint the icon for the active item
     mat-icon { color: var(--bcm-primary) !important; }
   }
+
+  // Keyboard focus ring on nav items
+  a:focus-visible {
+    outline:        2px solid var(--bcm-primary);
+    outline-offset: -2px;
+  }
 }
 
 // ── Content area ──────────────────────────────────────────────────────────────

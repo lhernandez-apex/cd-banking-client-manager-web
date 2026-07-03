@@ -72,6 +72,14 @@ export class App implements OnInit, OnDestroy {
     this.bpSub?.unsubscribe();
   }
 
+  /** Called when a sidenav nav item is clicked.
+   *  In overlay mode (mobile) the drawer closes automatically after navigation. */
+  onNavItemClick(): void {
+    if (this.sidenavMode === 'over') {
+      this.sidenavOpened = false;
+    }
+  }
+
   /** Called by the hamburger button in the toolbar. */
   onToggleSidenav(): void {
     this.sidenavOpened = !this.sidenavOpened;
