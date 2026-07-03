@@ -1,1 +1,53 @@
-/* You can add global styles to this file, and also import other style files */
+// ── Banking Client Manager — Global Styles ───────────────────────────────────
+// Uses Angular Material M3 theming with a professional banking palette:
+//   Primary  : Blue (trust, professionalism)
+//   Tertiary : Cyan (accent highlights)
+//   Surface  : Neutral gray-white (clean, enterprise feel)
+// ─────────────────────────────────────────────────────────────────────────────
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme((
+    color: (
+      primary:   mat.$blue-palette,
+      tertiary:  mat.$cyan-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+// ── Base reset ────────────────────────────────────────────────────────────────
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  color-scheme: light;
+  background-color: #f4f6f9;
+  color: var(--mat-sys-on-surface);
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+// ── Typography helpers ────────────────────────────────────────────────────────
+h1, h2, h3 { font-weight: 500; letter-spacing: -0.01em; }
+
+// ── Banking palette CSS custom properties ────────────────────────────────────
+:root {
+  --bcm-primary:        #1565c0;
+  --bcm-primary-light:  #e3f0ff;
+  --bcm-accent:         #0288d1;
+  --bcm-success:        #2e7d32;
+  --bcm-warn:           #c62828;
+  --bcm-surface:        #ffffff;
+  --bcm-background:     #f4f6f9;
+  --bcm-border:         #dde3ec;
+  --bcm-text-secondary: #546e7a;
+}
+
+// ── Elevation utility ─────────────────────────────────────────────────────────
+.bcm-card-shadow {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 0 1px rgba(0, 0, 0, 0.06) !important;
+  border-radius: 12px !important;
+}
