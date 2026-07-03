@@ -17,6 +17,12 @@ html {
   ));
 }
 
+// ── Universal box-sizing reset ────────────────────────────────────────────────
+// Ensures padding/border are included in element dimensions app-wide.
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 // ── Base reset ────────────────────────────────────────────────────────────────
 html, body {
   height: 100%;
@@ -24,14 +30,34 @@ html, body {
 }
 
 body {
-  color-scheme: light;
+  color-scheme:     light;
   background-color: #f4f6f9;
-  color: var(--mat-sys-on-surface);
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  color:            var(--mat-sys-on-surface);
+  font-family:      Roboto, 'Helvetica Neue', sans-serif;
+  scroll-behavior:  smooth;
+  -webkit-font-smoothing:  antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+// ── Responsive images ─────────────────────────────────────────────────────────
+img { max-width: 100%; height: auto; }
 
 // ── Typography helpers ────────────────────────────────────────────────────────
 h1, h2, h3 { font-weight: 500; letter-spacing: -0.01em; }
+
+// ── Accessible focus ring ─────────────────────────────────────────────────────
+// Visible keyboard-navigation outline; hidden for mouse/touch users.
+:focus-visible {
+  outline:        2px solid var(--bcm-primary);
+  outline-offset: 3px;
+  border-radius:  3px;
+}
+
+// ── Material icon vertical alignment ─────────────────────────────────────────
+// Prevents the 1–2 px baseline shift that affects inline icons in buttons/text.
+mat-icon {
+  vertical-align: middle;
+}
 
 // ── Banking palette CSS custom properties ────────────────────────────────────
 :root {
@@ -48,6 +74,17 @@ h1, h2, h3 { font-weight: 500; letter-spacing: -0.01em; }
 
 // ── Elevation utility ─────────────────────────────────────────────────────────
 .bcm-card-shadow {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 0 1px rgba(0, 0, 0, 0.06) !important;
+  box-shadow:    0 2px 8px rgba(0, 0, 0, 0.08), 0 0 1px rgba(0, 0, 0, 0.06) !important;
   border-radius: 12px !important;
 }
+
+// ── Scrollbar styling (WebKit/Blink) ─────────────────────────────────────────
+// Slim scrollbar consistent with enterprise design language.
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background:    rgba(0, 0, 0, 0.18);
+  border-radius: 3px;
+  &:hover { background: rgba(0, 0, 0, 0.30); }
+}
+
