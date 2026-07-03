@@ -1,11 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router }     from '@angular/router';
 import { ActivatedRoute }            from '@angular/router';
+import { provideNoopAnimations }     from '@angular/platform-browser/animations';
 import { of, throwError }            from 'rxjs';
 import { ClientFormComponent }       from './client-form.component';
 import { ClientService }             from '../../../core/services/client.service';
 import { Client, AccountType }       from '../../../shared/models/client.model';
 import { routes }                    from '../../../app.routes';
+import { MatSnackBar }               from '@angular/material/snack-bar';
 
 describe('ClientFormComponent', () => {
   let component:           ClientFormComponent;
@@ -35,11 +37,16 @@ describe('ClientFormComponent', () => {
     mockClientService.createClient.and.returnValue(of(existingClient));
     mockClientService.updateClient.and.returnValue(of(existingClient));
 
+    // MatSnackBar spy — prevents real overlay creation in unit tests
+    const mockSnackBar = jasmine.createSpyObj<MatSnackBar>('MatSnackBar', ['open']);
+
     await TestBed.configureTestingModule({
       imports:   [ClientFormComponent],
       providers: [
         { provide: ClientService, useValue: mockClientService },
+        { provide: MatSnackBar,   useValue: mockSnackBar },
         provideRouter(routes),
+        provideNoopAnimations(),
         {
           provide: ActivatedRoute,
           useValue: {

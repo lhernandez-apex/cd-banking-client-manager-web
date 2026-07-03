@@ -5,6 +5,17 @@ import {
   FormBuilder, FormGroup,
   ReactiveFormsModule, Validators
 }                                      from '@angular/forms';
+
+import { MatCardModule }               from '@angular/material/card';
+import { MatFormFieldModule }          from '@angular/material/form-field';
+import { MatInputModule }              from '@angular/material/input';
+import { MatSelectModule }             from '@angular/material/select';
+import { MatButtonModule }             from '@angular/material/button';
+import { MatIconModule }               from '@angular/material/icon';
+import { MatProgressSpinnerModule }    from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDividerModule }            from '@angular/material/divider';
+
 import { ClientService }               from '../../../core/services/client.service';
 import { AccountType, ACCOUNT_TYPE_LABELS } from '../../../shared/models/client.model';
 
@@ -15,12 +26,28 @@ import { AccountType, ACCOUNT_TYPE_LABELS } from '../../../shared/models/client.
  *  - No param   → create mode  (/clients/new)
  *  - id present → edit mode    (/clients/:id/edit)
  *
- * On successful submission the user is redirected to the client list.
+ * On successful submission a MatSnackBar toast confirms the action
+ * and the user is redirected to the client list.
+ *
+ * Public API (clientForm, isEditMode, pageTitle, field, fieldInvalid,
+ * onSubmit, onCancel) is fully preserved for backward test compatibility.
  */
 @Component({
   selector:    'app-client-form',
   standalone:  true,
-  imports:     [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatSnackBarModule,
+    MatDividerModule
+  ],
   templateUrl: './client-form.component.html',
   styleUrl:    './client-form.component.scss'
 })
@@ -46,7 +73,8 @@ export class ClientFormComponent implements OnInit {
     private readonly fb:            FormBuilder,
     private readonly route:         ActivatedRoute,
     private readonly router:        Router,
-    private readonly clientService: ClientService
+    private readonly clientService: ClientService,
+    private readonly snackBar:      MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -126,7 +154,17 @@ export class ClientFormComponent implements OnInit {
       : this.clientService.createClient(payload);
 
     request$.subscribe({
-      next:  () => this.router.navigate(['/clients']),
+      next: () => {
+        const successMsg = this.isEditMode
+          ? 'Client updated successfully.'
+          : 'Client created successfully.';
+        this.snackBar.open(successMsg, 'Dismiss', {
+          duration: 3500,
+          horizontalPosition: 'end',
+          verticalPosition:   'bottom'
+        });
+        this.router.navigate(['/clients']);
+      },
       error: (err) => {
         this.errorMessage = err?.error?.message ?? 'An error occurred. Please try again.';
         this.isSubmitting = false;
