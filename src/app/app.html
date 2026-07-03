@@ -1,2 +1,66 @@
-<!-- Application shell — the router renders active components here -->
-<router-outlet />
+<!-- ── Application Shell ────────────────────────────────────────────────────
+     Layout structure:
+       1. mat-toolbar  — sticky top bar (primary blue)
+       2. mat-sidenav-container — fills remaining viewport height
+            ├── mat-sidenav   — navigation drawer (side/over responsive)
+            └── mat-sidenav-content — page content via router-outlet
+──────────────────────────────────────────────────────────────────────────── -->
+
+<div class="shell-wrapper">
+
+  <!-- ── Top Toolbar ──────────────────────────────────────────────────────── -->
+  <mat-toolbar color="primary" class="shell-toolbar">
+    <button mat-icon-button
+            class="shell-menu-btn"
+            aria-label="Toggle navigation"
+            (click)="onToggleSidenav()">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <mat-icon class="shell-brand-icon">account_balance</mat-icon>
+    <span class="shell-brand-title">{{ appTitle }}</span>
+
+    <span class="shell-toolbar-spacer"></span>
+
+    <mat-icon class="shell-toolbar-avatar" aria-hidden="true">account_circle</mat-icon>
+  </mat-toolbar>
+
+  <!-- ── Sidenav Container ────────────────────────────────────────────────── -->
+  <mat-sidenav-container class="shell-sidenav-container">
+
+    <!-- Navigation Drawer -->
+    <mat-sidenav
+      class="shell-sidenav"
+      [mode]="sidenavMode"
+      [opened]="sidenavOpened"
+      (openedChange)="onSidenavOpenedChange($event)">
+
+      <div class="sidenav-header">
+        <span class="sidenav-section-label">Navigation</span>
+      </div>
+
+      <mat-divider />
+
+      <mat-nav-list class="sidenav-nav">
+        <a mat-list-item
+           routerLink="/clients"
+           routerLinkActive="sidenav-item--active"
+           [routerLinkActiveOptions]="{ exact: false }">
+          <mat-icon matListItemIcon>people</mat-icon>
+          <span matListItemTitle>Clients</span>
+        </a>
+      </mat-nav-list>
+
+    </mat-sidenav>
+
+    <!-- Main Content Area -->
+    <mat-sidenav-content class="shell-content">
+      <div class="shell-content-inner">
+        <router-outlet />
+      </div>
+    </mat-sidenav-content>
+
+  </mat-sidenav-container>
+
+</div>
+

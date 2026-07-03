@@ -1,0 +1,110 @@
+// ── Application Shell Styles ──────────────────────────────────────────────────
+
+// ── Outer wrapper: full-viewport flex column ──────────────────────────────────
+.shell-wrapper {
+  display:        flex;
+  flex-direction: column;
+  height:         100vh;
+  overflow:       hidden;
+}
+
+// ── Toolbar ───────────────────────────────────────────────────────────────────
+.shell-toolbar {
+  // Sits on top of the sidenav container — always visible
+  flex-shrink: 0;
+  position:    relative;
+  z-index:     100;
+
+  // Custom banking blue — overrides Material's primary default
+  background:  var(--bcm-primary) !important;
+  color:       #ffffff !important;
+  box-shadow:  0 2px 6px rgba(0, 0, 0, 0.22);
+}
+
+.shell-menu-btn {
+  color:        #ffffff !important;
+  margin-right: 4px;
+}
+
+.shell-brand-icon {
+  font-size:   1.6rem;
+  width:       1.6rem;
+  height:      1.6rem;
+  margin-right: 8px;
+  opacity:     0.92;
+}
+
+.shell-brand-title {
+  font-size:   1.15rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  white-space:    nowrap;
+}
+
+.shell-toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+.shell-toolbar-avatar {
+  font-size: 2rem;
+  width:     2rem;
+  height:    2rem;
+  opacity:   0.85;
+  cursor:    default;
+}
+
+// ── Sidenav container: fills remaining height ─────────────────────────────────
+.shell-sidenav-container {
+  flex:     1;
+  overflow: hidden;
+}
+
+// ── Drawer ────────────────────────────────────────────────────────────────────
+.shell-sidenav {
+  width:      240px;
+  background: #ffffff;
+  border-right: 1px solid var(--bcm-border) !important;
+}
+
+.sidenav-header {
+  padding:     20px 16px 12px;
+}
+
+.sidenav-section-label {
+  font-size:      0.72rem;
+  font-weight:    600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color:          var(--bcm-text-secondary);
+}
+
+// ── Nav items ─────────────────────────────────────────────────────────────────
+.sidenav-nav {
+  padding-top: 8px;
+
+  .sidenav-item--active {
+    background:    var(--bcm-primary-light) !important;
+    color:         var(--bcm-primary)       !important;
+    border-radius: 0 24px 24px 0;
+    font-weight:   600;
+
+    // Tint the icon for the active item
+    mat-icon { color: var(--bcm-primary) !important; }
+  }
+}
+
+// ── Content area ──────────────────────────────────────────────────────────────
+.shell-content {
+  background: var(--bcm-background);
+}
+
+.shell-content-inner {
+  padding:    28px 32px;
+  max-width:  1280px;
+  margin:     0 auto;
+
+  // Responsive: tighter padding on small screens
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+}
