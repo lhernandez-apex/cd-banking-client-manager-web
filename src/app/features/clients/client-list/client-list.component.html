@@ -1,51 +1,219 @@
-<!-- ── Header bar ──────────────────────────────────────────────────────── -->
-<div class="list-header">
-  <h2>Banking Clients</h2>
-  <button class="btn btn-primary" (click)="onNewClient()">+ New Client</button>
+<!-- ── Page header ─────────────────────────────────────────────────────────── -->
+<div class="page-header">
+  <div class="page-header__title-group">
+    <mat-icon class="page-header__icon">people</mat-icon>
+    <h2 class="page-header__title">Banking Clients</h2>
+  </div>
+  <button mat-raised-button color="primary" class="new-client-btn" (click)="onNewClient()">
+    <mat-icon>add</mat-icon>
+    New Client
+  </button>
 </div>
 
-<!-- ── Error banner ───────────────────────────────────────────────────── -->
-<div class="error-banner" *ngIf="errorMessage">
-  {{ errorMessage }}
+<!-- ── Error banner ─────────────────────────────────────────────────────────── -->
+<mat-card class="error-banner bcm-card-shadow" *ngIf="errorMessage && !isLoading">
+  <mat-card-content>
+    <div class="error-content">
+      <mat-icon class="error-content__icon">error_outline</mat-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<!-- ── Loading spinner ──────────────────────────────────────────────────────── -->
+<div class="loading-container" *ngIf="isLoading">
+  <mat-spinner diameter="52" color="primary"></mat-spinner>
+  <p class="loading-label">Loading clients…</p>
 </div>
 
-<!-- ── Loading indicator ──────────────────────────────────────────────── -->
-<div class="loading" *ngIf="isLoading">Loading clients…</div>
+<!-- ── Main content (shown after loading resolves) ──────────────────────────── -->
+<ng-container *ngIf="!isLoading && !errorMessage">
 
-<!-- ── Empty state ────────────────────────────────────────────────────── -->
-<div class="empty-state" *ngIf="!isLoading && clients.length === 0 && !errorMessage">
-  <p>No clients found. Click <strong>+ New Client</strong> to add one.</p>
-</div>
+  <!-- Summary stat cards (shown when clients exist) -->
+  <div class="stats-grid" *ngIf="clients.length > 0">
 
-<!-- ── Client table ───────────────────────────────────────────────────── -->
-<div class="table-wrapper" *ngIf="!isLoading && clients.length > 0">
-  <table class="client-table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Account Type</th>
-        <th>Balance</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let client of clients">
-        <td>{{ client.id }}</td>
-        <td>{{ client.name }}</td>
-        <td>{{ client.email }}</td>
-        <td>{{ accountTypeLabels[client.accountType] }}</td>
-        <td>{{ client.balance | number:'1.2-2' }}</td>
-        <td class="actions">
-          <a class="btn btn-sm btn-info"
-             [routerLink]="['/clients', client.id]">View</a>
-          <a class="btn btn-sm btn-warning"
-             [routerLink]="['/clients', client.id, 'edit']">Edit</a>
-          <button class="btn btn-sm btn-danger"
-                  (click)="onDelete(client.id, client.name)">Delete</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+    <mat-card class="stat-card bcm-card-shadow">
+      <mat-card-content class="stat-card__content">
+        <div class="stat-card__icon-wrap stat-card__icon-wrap--total">
+          <mat-icon>people</mat-icon>
+        </div>
+        <div class="stat-card__info">
+          <span class="stat-card__value">{{ totalClients }}</span>
+          <span class="stat-card__label">Total Clients</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card bcm-card-shadow">
+      <mat-card-content class="stat-card__content">
+        <div class="stat-card__icon-wrap stat-card__icon-wrap--savings">
+          <mat-icon>savings</mat-icon>
+        </div>
+        <div class="stat-card__info">
+          <span class="stat-card__value">{{ savingsCount }}</span>
+          <span class="stat-card__label">Savings Accounts</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card bcm-card-shadow">
+      <mat-card-content class="stat-card__content">
+        <div class="stat-card__icon-wrap stat-card__icon-wrap--checking">
+          <mat-icon>account_balance_wallet</mat-icon>
+        </div>
+        <div class="stat-card__info">
+          <span class="stat-card__value">{{ checkingCount }}</span>
+          <span class="stat-card__label">Checking Accounts</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card bcm-card-shadow">
+      <mat-card-content class="stat-card__content">
+        <div class="stat-card__icon-wrap stat-card__icon-wrap--balance">
+          <mat-icon>attach_money</mat-icon>
+        </div>
+        <div class="stat-card__info">
+          <span class="stat-card__value stat-card__value--balance">
+            {{ totalBalance | currency:'USD':'symbol':'1.0-0' }}
+          </span>
+          <span class="stat-card__label">Total Balance</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+
+  <!-- ── Table card ──────────────────────────────────────────────────────── -->
+  <mat-card class="table-card bcm-card-shadow">
+
+    <!-- Table toolbar: search field -->
+    <div class="table-toolbar">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search clients</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput
+               (input)="applySearch($event)"
+               placeholder="Name or email…"
+               aria-label="Search clients by name or email" />
+      </mat-form-field>
+    </div>
+
+    <mat-divider />
+
+    <!-- ── Empty state ────────────────────────────────────────────────────── -->
+    <div class="empty-state" *ngIf="clients.length === 0">
+      <mat-icon class="empty-state__icon">group_off</mat-icon>
+      <p class="empty-state__title">No clients yet</p>
+      <p class="empty-state__subtitle">
+        Your client list is empty. Click <strong>New Client</strong> to add the first record.
+      </p>
+      <button mat-raised-button color="primary" (click)="onNewClient()">
+        <mat-icon>add</mat-icon> Add First Client
+      </button>
+    </div>
+
+    <!-- ── No search results ──────────────────────────────────────────────── -->
+    <div class="no-results"
+         *ngIf="clients.length > 0 && dataSource.filteredData.length === 0">
+      <mat-icon class="no-results__icon">search_off</mat-icon>
+      <p class="no-results__text">No clients match your search.</p>
+    </div>
+
+    <!-- ── Data table ─────────────────────────────────────────────────────── -->
+    <div class="table-container" *ngIf="clients.length > 0">
+      <table mat-table
+             [dataSource]="dataSource"
+             matSort
+             class="client-table">
+
+        <!-- ID ── -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+          <td mat-cell *matCellDef="let client">{{ client.id }}</td>
+        </ng-container>
+
+        <!-- Name ── -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+          <td mat-cell *matCellDef="let client">
+            <span class="client-name">{{ client.name }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Email ── -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+          <td mat-cell *matCellDef="let client">
+            <span class="client-email">{{ client.email }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Account Type ── -->
+        <ng-container matColumnDef="accountType">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Account Type </th>
+          <td mat-cell *matCellDef="let client">
+            <span class="account-badge"
+                  [class.account-badge--savings]="client.accountType === 'SAVINGS'"
+                  [class.account-badge--checking]="client.accountType === 'CHECKING'">
+              {{ accountTypeLabels[client.accountType] }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Balance ── -->
+        <ng-container matColumnDef="balance">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Balance </th>
+          <td mat-cell *matCellDef="let client">
+            <span class="balance-value">
+              {{ client.balance | currency:'USD':'symbol':'1.2-2' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Actions ── -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let client">
+            <div class="action-cell">
+              <a mat-icon-button
+                 color="primary"
+                 [routerLink]="['/clients', client.id]"
+                 matTooltip="View details">
+                <mat-icon>visibility</mat-icon>
+              </a>
+              <a mat-icon-button
+                 [routerLink]="['/clients', client.id, 'edit']"
+                 matTooltip="Edit client"
+                 class="action-edit">
+                <mat-icon>edit</mat-icon>
+              </a>
+              <button mat-icon-button
+                      color="warn"
+                      (click)="onDelete(client.id, client.name)"
+                      matTooltip="Delete client">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Row definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="data-row"></tr>
+
+      </table>
+    </div>
+
+    <!-- Paginator (shown when there are clients) -->
+    <mat-paginator *ngIf="clients.length > 0"
+                   [pageSizeOptions]="[5, 10, 25]"
+                   pageSize="5"
+                   showFirstLastButtons
+                   aria-label="Select page">
+    </mat-paginator>
+
+  </mat-card>
+
+</ng-container>
+

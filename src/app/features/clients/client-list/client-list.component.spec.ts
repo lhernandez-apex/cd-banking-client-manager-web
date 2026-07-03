@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter }             from '@angular/router';
+import { provideNoopAnimations }     from '@angular/platform-browser/animations';
 import { of, throwError }            from 'rxjs';
 import { ClientListComponent }       from './client-list.component';
 import { ClientService }             from '../../../core/services/client.service';
@@ -32,7 +33,9 @@ describe('ClientListComponent', () => {
       imports:   [ClientListComponent],
       providers: [
         { provide: ClientService, useValue: mockClientService },
-        provideRouter(routes)
+        provideRouter(routes),
+        // Required by Angular Material components (table, cards, buttons)
+        provideNoopAnimations()
       ]
     }).compileComponents();
 
@@ -118,5 +121,27 @@ describe('ClientListComponent', () => {
     component.onDelete(1, 'Jane Doe');
 
     expect(component.errorMessage).toContain('Failed to delete');
+  });
+
+  // ── Summary stats ─────────────────────────────────────────────────────────
+
+  it('should compute correct stat totals from loaded client data', () => {
+    // sampleClients: 1 SAVINGS (1500) + 1 CHECKING (3200)
+    expect(component.totalClients).toBe(2);
+    expect(component.savingsCount).toBe(1);
+    expect(component.checkingCount).toBe(1);
+    expect(component.totalBalance).toBe(4700);
+  });
+
+  // ── Search filter ─────────────────────────────────────────────────────────
+
+  it('should filter the data source when a search term is applied', () => {
+    // Simulate typing "jane" into the search field
+    const fakeEvent = { target: { value: 'jane' } } as unknown as Event;
+    component.applySearch(fakeEvent);
+
+    expect(component.dataSource.filter).toBe('jane');
+    expect(component.dataSource.filteredData.length).toBe(1);
+    expect(component.dataSource.filteredData[0].name).toBe('Jane Doe');
   });
 });
