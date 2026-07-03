@@ -156,7 +156,7 @@
             <span class="account-badge"
                   [class.account-badge--savings]="client.accountType === 'SAVINGS'"
                   [class.account-badge--checking]="client.accountType === 'CHECKING'">
-              {{ accountTypeLabels[client.accountType] }}
+              {{ accountTypeLabel(client.accountType) }}
             </span>
           </td>
         </ng-container>

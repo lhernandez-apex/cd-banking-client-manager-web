@@ -15,7 +15,7 @@ import { MatTooltipModule }                   from '@angular/material/tooltip';
 import { MatDividerModule }                   from '@angular/material/divider';
 
 import { ClientService }               from '../../../core/services/client.service';
-import { Client, ACCOUNT_TYPE_LABELS } from '../../../shared/models/client.model';
+import { Client, ACCOUNT_TYPE_LABELS, AccountType } from '../../../shared/models/client.model';
 
 /**
  * Dashboard-style client list using Angular Material.
@@ -137,6 +137,11 @@ export class ClientListComponent implements OnInit, AfterViewInit {
   }
 
   // ── Navigation ─────────────────────────────────────────────────────────────
+
+  /** Returns the display label for an account type string from a mat-cell context. */
+  accountTypeLabel(type: string): string {
+    return ACCOUNT_TYPE_LABELS[type as AccountType] ?? type;
+  }
 
   /** Navigates to the create-client form. */
   onNewClient(): void {
