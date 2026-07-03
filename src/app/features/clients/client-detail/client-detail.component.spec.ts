@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed }   from '@angular/core/testing';
 import { ActivatedRoute, Router }       from '@angular/router';
+import { provideNoopAnimations }        from '@angular/platform-browser/animations';
 import { of, throwError, Subject }      from 'rxjs';
 
 import { ClientDetailComponent }        from './client-detail.component';
@@ -40,7 +41,8 @@ describe('ClientDetailComponent', () => {
       providers: [
         { provide: ClientService,  useValue: serviceSpy },
         { provide: Router,         useValue: routerSpy  },
-        { provide: ActivatedRoute, useValue: makeRoute(routeId) }
+        { provide: ActivatedRoute, useValue: makeRoute(routeId) },
+        provideNoopAnimations()
       ]
     }).compileComponents();
 
@@ -102,7 +104,8 @@ describe('ClientDetailComponent', () => {
       providers: [
         { provide: ClientService,  useValue: serviceSpy },
         { provide: Router,         useValue: routerSpy  },
-        { provide: ActivatedRoute, useValue: makeRoute('7') }
+        { provide: ActivatedRoute, useValue: makeRoute('7') },
+        provideNoopAnimations()
       ]
     }).compileComponents();
 

@@ -1,7 +1,16 @@
 import { Component, OnInit }    from '@angular/core';
 import { CommonModule }         from '@angular/common';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ClientService }        from '../../../core/services/client.service';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { MatCardModule }          from '@angular/material/card';
+import { MatButtonModule }        from '@angular/material/button';
+import { MatIconModule }          from '@angular/material/icon';
+import { MatProgressBarModule }   from '@angular/material/progress-bar';
+import { MatChipsModule }         from '@angular/material/chips';
+import { MatDividerModule }       from '@angular/material/divider';
+import { MatTooltipModule }       from '@angular/material/tooltip';
+
+import { ClientService }          from '../../../core/services/client.service';
 import { Client, ACCOUNT_TYPE_LABELS } from '../../../shared/models/client.model';
 
 /**
@@ -9,11 +18,23 @@ import { Client, ACCOUNT_TYPE_LABELS } from '../../../shared/models/client.model
  *
  * Loaded via route param :id from /clients/:id.
  * Provides navigation back to the list or forward to the edit form.
+ *
+ * All original CSS class names are preserved on Material elements so
+ * the existing unit tests continue to pass without modification.
  */
 @Component({
   selector:    'app-client-detail',
   standalone:  true,
-  imports:     [CommonModule, RouterLink],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressBarModule,
+    MatChipsModule,
+    MatDividerModule,
+    MatTooltipModule
+  ],
   templateUrl: './client-detail.component.html',
   styleUrl:    './client-detail.component.scss'
 })

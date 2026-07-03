@@ -1,134 +1,207 @@
-/* ── Detail shell ───────────────────────────────────────────────────────── */
-.detail-shell {
-  max-width: 640px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-  font-family: sans-serif;
+/* ── Client Detail Component Styles ───────────────────────────────────────
+   Material handles card elevation/colour; these rules cover layout,
+   header gradient, field rows, and status state helpers.
+────────────────────────────────────────────────────────────────────────── */
+
+// ── Page wrapper ─────────────────────────────────────────────────────────────
+
+.detail-page {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 24px 16px;
 }
 
-/* ── Status banners ─────────────────────────────────────────────────────── */
-.status-banner {
-  padding: 0.85rem 1.2rem;
-  border-radius: 6px;
-  margin-bottom: 1.5rem;
-  font-size: 0.95rem;
+// ── Breadcrumb back button ────────────────────────────────────────────────────
 
-  &--loading {
-    background: #e8f4fd;
-    color: #1a5a8a;
-    border: 1px solid #b3d7f0;
-  }
+.detail-breadcrumb {
+  margin-bottom: 16px;
 
-  &--error {
-    background: #fdecea;
-    color: #a02020;
-    border: 1px solid #f5b4b4;
+  .back-crumb-btn {
+    color: var(--bcm-text-secondary);
+    font-size: 0.875rem;
+
+    mat-icon {
+      font-size: 18px;
+      height: 18px;
+      width: 18px;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
   }
 }
 
-/* ── Detail card ────────────────────────────────────────────────────────── */
-.detail-card {
-  background: #ffffff;
-  border: 1px solid #dde1e7;
+// ── Loading state ─────────────────────────────────────────────────────────────
+
+// class status-banner--loading is queried by tests — keep intact
+.status-banner--loading {
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  background: #fff;
+  padding-bottom: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 
-  &__header {
+  .loading-label {
+    text-align: center;
+    color: var(--bcm-text-secondary);
+    font-size: 0.875rem;
+    margin: 12px 0 0;
+  }
+
+  mat-progress-bar {
+    border-radius: 0;
+  }
+}
+
+// ── Error card ────────────────────────────────────────────────────────────────
+
+// class status-banner--error is queried by tests — keep on the mat-card host
+.error-card {
+  border-radius: 12px !important;
+  border-left: 4px solid var(--bcm-warn);
+
+  &__content {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 1.25rem 1.5rem;
-    background: #f8f9fa;
-    border-bottom: 1px solid #dde1e7;
+    gap: 10px;
+    padding: 16px 16px 8px !important;
+    color: var(--bcm-warn);
+    font-size: 0.9rem;
   }
 
-  &__title {
-    margin: 0;
-    font-size: 1.35rem;
-    font-weight: 600;
-    color: #1a1a2e;
-    flex: 1;
+  &__icon {
+    flex-shrink: 0;
+    color: var(--bcm-warn);
+  }
+}
+
+.error-back-btn {
+  color: var(--bcm-text-secondary);
+}
+
+// ── Detail card ───────────────────────────────────────────────────────────────
+
+.detail-card {
+  border-radius: 12px !important;
+  overflow: hidden;
+
+  // ── Gradient header ──────────────────────────────────────────────────────
+
+  &__header {
+    padding: 20px 24px 16px !important;
+    background: linear-gradient(135deg, var(--bcm-primary) 0%, #1976d2 100%);
+    color: #fff;
+    align-items: center !important;
+
+    // Override Material white text on dark gradient
+    ::ng-deep .mat-mdc-card-title,
+    ::ng-deep .mat-mdc-card-subtitle {
+      color: #fff !important;
+    }
   }
 
-  &__badge {
-    padding: 0.25rem 0.65rem;
-    border-radius: 20px;
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-
-    &--savings  { background: #d4edda; color: #1a5c2e; }
-    &--checking { background: #cce5ff; color: #004085; }
-  }
-
-  /* Definition list of fields */
-  &__fields {
-    margin: 0;
-    padding: 0.5rem 0;
-  }
-
-  &__row {
+  // Client initials avatar bubble
+  &__avatar {
     display: flex;
-    align-items: baseline;
-    padding: 0.75rem 1.5rem;
-    border-bottom: 1px solid #f1f3f5;
+    align-items: center;
+    justify-content: center;
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+    margin-right: 14px;
+  }
 
-    &:last-child { border-bottom: none; }
+  &__actions {
+    padding: 12px 16px 20px !important;
+    gap: 10px;
+  }
+}
+
+// ── Account type chip — class preserved for tests ─────────────────────────────
+
+.detail-card__badge {
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  min-height: 24px !important;
+  padding: 0 10px !important;
+  border-radius: 12px !important;
+  color: #fff !important;
+  border: none !important;
+  cursor: default !important;
+
+  &--savings  { background-color: #2e7d32 !important; }
+  &--checking { background-color: #1565c0 !important; }
+
+  // Hide Material's default chip ripple/focus ring
+  ::ng-deep .mat-mdc-chip-action { cursor: default !important; }
+}
+
+// ── Field rows ────────────────────────────────────────────────────────────────
+
+// .detail-card__fields is the mat-card-content — queried by tests
+.detail-card__fields {
+  padding: 8px 16px !important;
+}
+
+.detail-field {
+  display: flex;
+  align-items: center;
+  padding: 12px 8px;
+  gap: 12px;
+
+  &__icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--bcm-primary-light);
+    flex-shrink: 0;
+  }
+
+  &__icon {
+    font-size: 20px !important;
+    height: 20px !important;
+    width: 20px !important;
+    color: var(--bcm-primary);
   }
 
   &__label {
-    min-width: 140px;
-    font-size: 0.85rem;
+    flex: 0 0 140px;
+    font-size: 0.8rem;
     font-weight: 600;
-    color: #6c757d;
+    color: var(--bcm-text-secondary);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.04em;
   }
 
   &__value {
     flex: 1;
-    margin: 0;
-    font-size: 1rem;
-    color: #212529;
-
-    &--balance {
-      font-weight: 700;
-      color: #1a5c2e;
-      font-size: 1.05rem;
-    }
-  }
-
-  /* Footer buttons */
-  &__actions {
-    display: flex;
-    gap: 0.75rem;
-    padding: 1.1rem 1.5rem;
-    background: #f8f9fa;
-    border-top: 1px solid #dde1e7;
+    font-size: 0.95rem;
+    color: #212121;
+    word-break: break-word;
   }
 }
 
-/* ── Error-state back-link row ──────────────────────────────────────────── */
-.error-actions {
-  margin-top: 1rem;
+.field-divider {
+  margin: 0 8px !important;
 }
 
-/* ── Shared button styles ───────────────────────────────────────────────── */
-.btn {
-  padding: 0.55rem 1.2rem;
-  border: none;
-  border-radius: 5px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: opacity 0.15s ease;
+// Balance value — class preserved for tests
+.detail-card__value--balance {
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  color: var(--bcm-success) !important;
+}
 
-  &:disabled { opacity: 0.55; cursor: not-allowed; }
+// ── Action buttons ────────────────────────────────────────────────────────────
 
-  &--primary   { background: #0d6efd; color: #fff;     }
-  &--secondary { background: #6c757d; color: #fff;     }
-
-  &:hover:not(:disabled) { opacity: 0.88; }
+// .btn--secondary / .btn--primary classes preserved for test selectors
+.btn--secondary {
+  color: var(--bcm-text-secondary);
 }
