@@ -1,72 +1,159 @@
-<section class="detail-shell">
+<!-- ── Detail Page Shell ──────────────────────────────────────────────────────
+     Layout:
+       breadcrumb back button
+       loading progress bar   (class status-banner--loading  preserved for tests)
+       error card             (class status-banner--error     preserved for tests)
+       detail mat-card
+         gradient header      (name: class detail-card__title | chip: class detail-card__badge)
+         mat-divider
+         field list           (wrapper: class detail-card__fields)
+           balance cell:      class detail-card__value--balance
+         mat-divider
+         actions              (back: class btn--secondary | edit: class btn--primary)
+──────────────────────────────────────────────────────────────────────────── -->
 
-  <!-- ── Loading state ─────────────────────────────────────────── -->
-  <div *ngIf="isLoading" class="status-banner status-banner--loading" role="status">
-    Loading client details…
-  </div>
+<div class="detail-page">
 
-  <!-- ── Error state ───────────────────────────────────────────── -->
-  <div *ngIf="errorMessage && !isLoading" class="status-banner status-banner--error" role="alert">
-    {{ errorMessage }}
-  </div>
-
-  <!-- ── Client detail card ────────────────────────────────────── -->
-  <div *ngIf="client && !isLoading" class="detail-card">
-
-    <header class="detail-card__header">
-      <h2 class="detail-card__title">{{ client.name }}</h2>
-      <span class="detail-card__badge"
-            [class.detail-card__badge--savings]="client.accountType === 'SAVINGS'"
-            [class.detail-card__badge--checking]="client.accountType === 'CHECKING'">
-        {{ accountTypeLabels[client.accountType] }}
-      </span>
-    </header>
-
-    <dl class="detail-card__fields">
-
-      <div class="detail-card__row">
-        <dt class="detail-card__label">Client ID</dt>
-        <dd class="detail-card__value">{{ client.id }}</dd>
-      </div>
-
-      <div class="detail-card__row">
-        <dt class="detail-card__label">Email</dt>
-        <dd class="detail-card__value">{{ client.email }}</dd>
-      </div>
-
-      <div class="detail-card__row">
-        <dt class="detail-card__label">Account Type</dt>
-        <dd class="detail-card__value">{{ accountTypeLabels[client.accountType] }}</dd>
-      </div>
-
-      <div class="detail-card__row">
-        <dt class="detail-card__label">Balance</dt>
-        <dd class="detail-card__value detail-card__value--balance">
-          {{ client.balance | currency:'USD':'symbol':'1.2-2' }}
-        </dd>
-      </div>
-
-    </dl>
-
-    <!-- ── Action row ─────────────────────────────────────────── -->
-    <footer class="detail-card__actions">
-      <button type="button" class="btn btn--secondary" (click)="onBack()">
-        ← Back to List
-      </button>
-      <button type="button" class="btn btn--primary"
-              [disabled]="isLoading"
-              (click)="onEdit()">
-        Edit Client
-      </button>
-    </footer>
-
-  </div>
-
-  <!-- ── Back button shown even when no client loaded (error case) ─ -->
-  <div *ngIf="errorMessage && !isLoading" class="error-actions">
-    <button type="button" class="btn btn--secondary" (click)="onBack()">
-      ← Back to List
+  <!-- ── Breadcrumb back button ──────────────────────────────────────────── -->
+  <div class="detail-breadcrumb">
+    <button mat-button class="back-crumb-btn" type="button" (click)="onBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Clients
     </button>
   </div>
 
-</section>
+  <!-- ── Loading state (class preserved for test selector) ──────────────── -->
+  <div *ngIf="isLoading"
+       class="status-banner--loading"
+       role="status"
+       aria-label="Loading client details">
+    <mat-progress-bar mode="indeterminate" color="primary" />
+    <p class="loading-label">Loading client details…</p>
+  </div>
+
+  <!-- ── Error state (class preserved for test selector) ───────────────── -->
+  <mat-card *ngIf="errorMessage && !isLoading"
+            class="status-banner--error error-card bcm-card-shadow"
+            role="alert">
+    <mat-card-content class="error-card__content">
+      <mat-icon class="error-card__icon">error_outline</mat-icon>
+      <span>{{ errorMessage }}</span>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button class="btn--secondary error-back-btn" (click)="onBack()">
+        <mat-icon>arrow_back</mat-icon>
+        Back to Clients
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <!-- ── Client detail card ─────────────────────────────────────────────── -->
+  <mat-card *ngIf="client && !isLoading" class="detail-card bcm-card-shadow">
+
+    <!-- ── Gradient header: name + account type chip ──────────────────── -->
+    <mat-card-header class="detail-card__header">
+
+      <!-- Avatar circle with initials -->
+      <div mat-card-avatar class="detail-card__avatar">
+        {{ client.name.charAt(0).toUpperCase() }}
+      </div>
+
+      <!-- Client name — class preserved for test selector -->
+      <mat-card-title class="detail-card__title">
+        {{ client.name }}
+      </mat-card-title>
+
+      <!-- Account type chip — class + text preserved for test selector -->
+      <mat-card-subtitle>
+        <mat-chip class="detail-card__badge"
+                  [class.detail-card__badge--savings]="client.accountType === 'SAVINGS'"
+                  [class.detail-card__badge--checking]="client.accountType === 'CHECKING'"
+                  disableRipple>
+          {{ accountTypeLabels[client.accountType] }}
+        </mat-chip>
+      </mat-card-subtitle>
+
+    </mat-card-header>
+
+    <mat-divider />
+
+    <!-- ── Field rows — wrapper class preserved for test selector ─────── -->
+    <mat-card-content class="detail-card__fields">
+
+      <!-- Client ID -->
+      <div class="detail-field">
+        <span class="detail-field__icon-wrap">
+          <mat-icon class="detail-field__icon">tag</mat-icon>
+        </span>
+        <span class="detail-field__label">Client ID</span>
+        <span class="detail-field__value">{{ client.id }}</span>
+      </div>
+
+      <mat-divider class="field-divider" />
+
+      <!-- Email -->
+      <div class="detail-field">
+        <span class="detail-field__icon-wrap">
+          <mat-icon class="detail-field__icon">email</mat-icon>
+        </span>
+        <span class="detail-field__label">Email Address</span>
+        <span class="detail-field__value">{{ client.email }}</span>
+      </div>
+
+      <mat-divider class="field-divider" />
+
+      <!-- Account Type -->
+      <div class="detail-field">
+        <span class="detail-field__icon-wrap">
+          <mat-icon class="detail-field__icon">account_balance</mat-icon>
+        </span>
+        <span class="detail-field__label">Account Type</span>
+        <span class="detail-field__value">{{ accountTypeLabels[client.accountType] }}</span>
+      </div>
+
+      <mat-divider class="field-divider" />
+
+      <!-- Balance — class preserved for test selector -->
+      <div class="detail-field">
+        <span class="detail-field__icon-wrap">
+          <mat-icon class="detail-field__icon">attach_money</mat-icon>
+        </span>
+        <span class="detail-field__label">Balance</span>
+        <span class="detail-field__value detail-card__value--balance">
+          {{ client.balance | currency:'USD':'symbol':'1.2-2' }}
+        </span>
+      </div>
+
+    </mat-card-content>
+
+    <mat-divider />
+
+    <!-- ── Action row — button classes preserved for test selectors ────── -->
+    <mat-card-actions align="end" class="detail-card__actions">
+
+      <button mat-button
+              class="btn--secondary"
+              type="button"
+              (click)="onBack()"
+              matTooltip="Return to client list">
+        <mat-icon>arrow_back</mat-icon>
+        Back to List
+      </button>
+
+      <button mat-raised-button
+              color="primary"
+              class="btn--primary"
+              type="button"
+              [disabled]="isLoading"
+              (click)="onEdit()"
+              matTooltip="Edit this client">
+        <mat-icon>edit</mat-icon>
+        Edit Client
+      </button>
+
+    </mat-card-actions>
+
+  </mat-card>
+
+</div>
+
